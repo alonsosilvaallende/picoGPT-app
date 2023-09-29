@@ -106,6 +106,10 @@ def main(prompt: str, n_tokens_to_generate: int = 40, encoder=encoder, hparams=h
 
 import streamlit as st
 
+st.title("PicoGPT: An unnecessarily tiny implementation of GPT-2 in NumPy")
+
+st.markdown("For more information, take a look at the blog post by [@jaykmody](https://twitter.com/jaykmody): [GPT in 60 lines of NumPy](https://jaykmody.com/blog/gpt-from-scratch/)")
+
 with st.form(key='my_form'):
     prompt = st.text_area("Prompt:", "Alan Turing theorized that computers would one day become")
     submit_button = st.form_submit_button(label='Submit')
