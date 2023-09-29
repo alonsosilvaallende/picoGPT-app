@@ -118,7 +118,8 @@ st.markdown("For more information, take a look at the blog post by [@jaykmody](h
 
 with st.form(key='my_form'):
     prompt = st.text_area("Prompt:", "Alan Turing theorized that computers would one day become")
+    n_tokens_to_generate = st.slider('Number of tokens to generate:', min_value=1, max_value=250, value=40, step=1)
     submit_button = st.form_submit_button(label='Submit')
 
 if submit_button:
-    st.markdown(f"{main(prompt)}")
+    st.markdown(f"{main(prompt, n_tokens_to_generate)}")
