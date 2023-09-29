@@ -76,10 +76,14 @@ def gpt2(inputs, wte, wpe, blocks, ln_f, n_head):  # [n_seq] -> [n_seq, n_vocab]
     return x @ wte.T  # [n_seq, n_embd] -> [n_seq, n_vocab]
 
 def generate(inputs, params, n_head, n_tokens_to_generate):
-    for _ in tqdm(range(n_tokens_to_generate), "generating"):  # auto-regressive decode loop
-        logits = gpt2(inputs, **params, n_head=n_head)  # model forward pass
-        next_id = np.argmax(logits[-1])  # greedy sampling
-        inputs.append(int(next_id))  # append prediction to input
+    with st.empty():
+        aux_string = ""
+        for _ in tqdm(range(n_tokens_to_generate), "generating"):  # auto-regressive decode loop
+            logits = gpt2(inputs, **params, n_head=n_head)  # model forward pass
+            next_id = np.argmax(logits[-1])  # greedy sampling
+            aux_string += encoder.decode([next_id])
+            st.write(aux_string)
+            inputs.append(int(next_id))  # append prediction to input
 
     return inputs[len(inputs) - n_tokens_to_generate :]
 
@@ -100,11 +104,13 @@ def main(prompt: str, n_tokens_to_generate: int = 40, encoder=encoder, hparams=h
     output_ids = generate(input_ids, params, hparams["n_head"], n_tokens_to_generate)
 
     # decode the ids back into a string
-    output_text = encoder.decode(output_ids)
+    #output_text = encoder.decode(output_ids)
 
-    return output_text
+    return ""
 
 import streamlit as st
+
+st.set_page_config(page_title="PicoGPT", page_icon=None, layout="centered", initial_sidebar_state="auto", menu_items=None)
 
 st.title("PicoGPT: An unnecessarily tiny implementation of GPT-2 in NumPy")
 
